@@ -7,30 +7,59 @@ use App\Http\Controllers\Api\ApiPatientController;
 use App\Http\Controllers\Api\ApiPharmacyController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->middleware('auth:web')->group(function () {
-    // Patients
-    Route::apiResource('patients', ApiPatientController::class)
-        ->names('api.patients');
+Route::prefix('v1')
+    ->middleware('auth:web')
+    ->name('api.v1.')
+    ->group(function () {
 
-    // Consultations
-    Route::apiResource('consultations', ApiConsultationController::class)
-        ->names('api.consultations');
-    // Hospitalizations
-    Route::apiResource('hospitalizations', ApiHospitalizationController::class);
-    Route::put('hospitalizations/{hospitalization}/discharge', [ApiHospitalizationController::class, 'discharge']);
+        // Patients
+        Route::apiResource('patients', ApiPatientController::class);
 
-    // Laboratory
-    Route::get('laboratory', [ApiLaboratoryController::class, 'index']);
-    Route::post('laboratory', [ApiLaboratoryController::class, 'store']);
-    Route::get('laboratory/{laboratoryAnalysis}', [ApiLaboratoryController::class, 'show']);
-    Route::put('laboratory/{laboratoryAnalysis}/results', [ApiLaboratoryController::class, 'enterResults']);
-    Route::put('laboratory/{laboratoryAnalysis}/validate', [ApiLaboratoryController::class, 'validateAnalysis']);
+        // Consultations
+        Route::apiResource('consultations', ApiConsultationController::class);
 
-    // Pharmacy
-    Route::get('pharmacy', [ApiPharmacyController::class, 'index']);
-    Route::post('pharmacy', [ApiPharmacyController::class, 'store']);
-    Route::get('pharmacy/{medication}', [ApiPharmacyController::class, 'show']);
-    Route::put('pharmacy/{medication}', [ApiPharmacyController::class, 'update']);
-    Route::post('pharmacy/{medication}/dispense', [ApiPharmacyController::class, 'dispense']);
-    Route::post('pharmacy/{medication}/restock', [ApiPharmacyController::class, 'restock']);
-});
+        // Hospitalizations
+        Route::apiResource('hospitalizations', ApiHospitalizationController::class);
+
+        Route::put(
+            'hospitalizations/{hospitalization}/discharge',
+            [ApiHospitalizationController::class, 'discharge']
+        )->name('hospitalizations.discharge');
+
+
+        // Laboratory
+        Route::get('laboratory', [ApiLaboratoryController::class, 'index'])
+            ->name('laboratory.index');
+
+        Route::post('laboratory', [ApiLaboratoryController::class, 'store'])
+            ->name('laboratory.store');
+
+        Route::get('laboratory/{laboratoryAnalysis}', [ApiLaboratoryController::class, 'show'])
+            ->name('laboratory.show');
+
+        Route::put('laboratory/{laboratoryAnalysis}/results', [ApiLaboratoryController::class, 'enterResults'])
+            ->name('laboratory.results');
+
+        Route::put('laboratory/{laboratoryAnalysis}/validate', [ApiLaboratoryController::class, 'validateAnalysis'])
+            ->name('laboratory.validate');
+
+
+        // Pharmacy
+        Route::get('pharmacy', [ApiPharmacyController::class, 'index'])
+            ->name('pharmacy.index');
+
+        Route::post('pharmacy', [ApiPharmacyController::class, 'store'])
+            ->name('pharmacy.store');
+
+        Route::get('pharmacy/{medication}', [ApiPharmacyController::class, 'show'])
+            ->name('pharmacy.show');
+
+        Route::put('pharmacy/{medication}', [ApiPharmacyController::class, 'update'])
+            ->name('pharmacy.update');
+
+        Route::post('pharmacy/{medication}/dispense', [ApiPharmacyController::class, 'dispense'])
+            ->name('pharmacy.dispense');
+
+        Route::post('pharmacy/{medication}/restock', [ApiPharmacyController::class, 'restock'])
+            ->name('pharmacy.restock');
+    });
