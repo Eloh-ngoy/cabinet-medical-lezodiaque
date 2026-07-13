@@ -1,0 +1,416 @@
+# CAHIER DES CHARGES COMPLET
+
+## Contexte du projet
+
+Développer une application web moderne en Laravel 12 nommée :
+
+**Système d'Information Hospitalier Intelligent pour la Gestion Intégrée des Processus Médicaux et Administratifs**
+
+L'objectif est de concevoir un système professionnel destiné aux structures de santé permettant la gestion centralisée des patients, du personnel médical, des consultations, des hospitalisations, des prescriptions, du laboratoire, de la pharmacie et des activités administratives.
+
+Le projet doit être conçu comme un véritable logiciel hospitalier professionnel et non comme un simple projet académique de gestion des patients.
+
+---
+
+# Exigences techniques
+
+## Backend
+
+* Laravel 12
+* PHP 8.4+
+* PostgreSQL
+* API REST complète
+* Architecture modulaire
+* Policies Laravel
+* Gates Laravel
+* Form Requests
+* Service Layer
+* Repository Pattern si nécessaire
+
+## Frontend
+
+* Blade ou Vue.js
+* Tailwind CSS
+* Interface moderne
+* Responsive design
+* Dashboard professionnel
+
+---
+
+# Philosophie du design
+
+Éviter les interfaces médicales classiques vues partout.
+
+Le design doit être :
+
+* épuré
+* moderne
+* minimaliste
+* professionnel
+* inspiré des applications SaaS modernes
+
+Éviter :
+
+* les couleurs agressives
+* les tableaux surchargés
+* les interfaces vieillissantes
+
+Privilégier :
+
+* cartes informatives
+* espaces aérés
+* typographie moderne
+* navigation claire
+* expérience utilisateur simple
+
+---
+
+# Gestion des rôles et permissions
+
+Le système doit appliquer un contrôle d'accès strict.
+
+Chaque rôle possède des autorisations différentes.
+
+Aucun rôle ne doit pouvoir effectuer des actions non autorisées.
+
+---
+
+## Directeur Général Médecin
+
+C'est le super administrateur.
+
+Peut :
+
+* créer un compte personnel
+* modifier un compte personnel
+* désactiver un compte personnel
+* réactiver un compte personnel
+* attribuer les rôles
+* consulter tous les dossiers
+* consulter tous les historiques
+* consulter tous les rapports
+* gérer les services hospitaliers
+
+Ne peut pas être supprimé.
+
+---
+
+## Médecin
+
+Peut :
+
+* consulter les patients
+* créer une consultation
+* établir un diagnostic
+* prescrire un traitement
+* demander une analyse de laboratoire
+* consulter les résultats d'analyse
+* consulter l'historique médical complet
+
+Ne peut pas :
+
+* gérer les utilisateurs
+* gérer les stocks
+
+---
+
+## Infirmier
+
+Peut :
+
+* consulter les dossiers patients
+* enregistrer les signes vitaux
+* suivre les hospitalisations
+* mettre à jour les observations infirmières
+
+Ne peut jamais :
+
+* établir un diagnostic
+* prescrire un médicament
+* modifier une prescription
+
+---
+
+## Pharmacien
+
+Peut :
+
+* consulter les prescriptions
+* consulter les dossiers médicaux nécessaires à la dispensation
+* délivrer les médicaments
+* gérer le stock pharmaceutique
+
+Ne peut pas :
+
+* modifier les diagnostics
+* modifier les consultations
+* créer des prescriptions
+
+---
+
+## Laborantin
+
+Peut :
+
+* consulter les demandes d'analyses
+* saisir les résultats
+* valider les résultats
+
+Ne peut pas :
+
+* modifier les consultations
+* prescrire
+
+---
+
+## Réceptionniste
+
+Peut :
+
+* enregistrer un patient
+* créer un rendez-vous
+* gérer les admissions
+
+Ne peut pas :
+
+* consulter les données médicales sensibles
+* voir les diagnostics
+* voir les prescriptions détaillées
+
+---
+
+# Gestion du personnel
+
+Le Directeur Général Médecin peut créer un compte personnel.
+
+Lors de la création :
+
+* nom
+* prénom
+* matricule
+* email professionnel
+* rôle
+* mot de passe temporaire
+
+À la première connexion :
+
+* obligation de changer le mot de passe
+
+Par la suite :
+
+* chaque utilisateur peut modifier son mot de passe
+* chaque utilisateur peut modifier certaines informations de son profil
+
+---
+
+# Gestion des patients
+
+Pour chaque patient :
+
+## Informations administratives
+
+* numéro unique
+* nom
+* prénom
+* sexe
+* date de naissance
+* téléphone
+* adresse
+* personne à contacter en cas d'urgence
+* photo
+
+## Informations médicales
+
+* groupe sanguin
+* allergies
+* antécédents
+* maladies chroniques
+
+---
+
+# Dossier médical électronique
+
+Le dossier doit conserver :
+
+* consultations
+* hospitalisations
+* analyses
+* prescriptions
+* traitements
+* observations
+
+Aucune donnée ne doit être supprimée définitivement.
+
+---
+
+# Consultations
+
+Le médecin doit pouvoir :
+
+* enregistrer le motif
+* enregistrer le diagnostic
+* enregistrer les recommandations
+* prescrire un traitement
+
+Chaque consultation doit être liée :
+
+* au médecin
+* à la date
+* au patient
+
+---
+
+# Prescriptions
+
+Chaque prescription doit enregistrer :
+
+* médicament
+* dosage
+* fréquence
+* durée
+
+Le système doit enregistrer :
+
+* quel médecin a prescrit
+* quand la prescription a été créée
+
+Les prescriptions sont en lecture seule après validation.
+
+---
+
+# Hospitalisation
+
+Gestion :
+
+* admission
+* transfert
+* sortie
+
+Suivi :
+
+* chambre
+* lit
+* service
+
+Historique complet des mouvements.
+
+---
+
+# Laboratoire
+
+Gestion :
+
+* demandes d'analyses
+* résultats
+* validation
+
+Traçabilité obligatoire.
+
+---
+
+# Pharmacie
+
+Gestion :
+
+* stock
+* entrées
+* sorties
+* délivrance
+
+Historique complet.
+
+---
+
+# Journal d'audit obligatoire
+
+Fonctionnalité critique.
+
+Le système doit enregistrer automatiquement :
+
+* création
+* modification
+* suppression logique
+* connexion
+* déconnexion
+
+Pour chaque action :
+
+* utilisateur concerné
+* date
+* heure
+* ancienne valeur
+* nouvelle valeur
+* adresse IP
+
+Exemples :
+
+"Dr. Mukendi a prescrit Amoxicilline au patient #P-00054"
+
+"Infirmier Kabeya a ajouté une observation au dossier du patient #P-00054"
+
+"Pharmacien Kalala a délivré la prescription #ORD-145"
+
+"Réceptionniste Sarah a modifié le numéro de téléphone du patient #P-00054"
+
+Le Directeur Général doit pouvoir consulter l'ensemble des journaux.
+
+---
+
+# Historique des modifications
+
+Pour chaque patient, afficher :
+
+Historique chronologique complet :
+
+* qui a modifié quoi
+* quand
+* ancienne valeur
+* nouvelle valeur
+
+Exemple :
+
+Téléphone :
+
+Ancienne valeur :
+0811111111
+
+Nouvelle valeur :
+0822222222
+
+Modifié par :
+Sarah Kabeya
+
+Date :
+12/09/2026 à 10h45
+
+---
+
+# Tableau de bord
+
+Afficher :
+
+* nombre total de patients
+* consultations du jour
+* admissions du jour
+* patients hospitalisés
+* prescriptions du jour
+* analyses en attente
+* médicaments faibles en stock
+
+---
+
+# Sécurité
+
+* Authentification sécurisée
+* Hashage des mots de passe
+* Protection CSRF
+* Gestion stricte des permissions
+* Journalisation complète
+* Suppression logique (Soft Deletes)
+* Validation de toutes les entrées
+
+---
+
+# Résultat attendu
+
+L'application finale doit ressembler à un véritable logiciel hospitalier professionnel utilisé dans une clinique ou un hôpital moderne, avec une forte traçabilité, une gestion rigoureuse des rôles et un historique détaillé de toutes les actions réalisées dans le système.

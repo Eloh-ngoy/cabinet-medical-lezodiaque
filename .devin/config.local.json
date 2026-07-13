@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Exec(cd)",
+      "Exec(php artisan)",
+      "Exec(composer require)",
+      "Exec(mkdir)",
+      "Exec(Remove-Item)",
+      "Exec(ls)",
+      "Exec(dir)"
+    ]
+  }
+}
