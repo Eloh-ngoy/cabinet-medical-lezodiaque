@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware('auth:web')->group(function () {
     // Patients
-    Route::apiResource('patients', ApiPatientController::class);
+    Route::apiResource('patients', ApiPatientController::class)
+        ->names('api.patients');
 
     // Consultations
     Route::apiResource('consultations', ApiConsultationController::class);
