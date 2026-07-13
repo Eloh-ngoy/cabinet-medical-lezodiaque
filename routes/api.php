@@ -13,8 +13,8 @@ Route::prefix('v1')->middleware('auth:web')->group(function () {
         ->names('api.patients');
 
     // Consultations
-    Route::apiResource('consultations', ApiConsultationController::class);
-
+    Route::apiResource('consultations', ApiConsultationController::class)
+        ->names('api.consultations');
     // Hospitalizations
     Route::apiResource('hospitalizations', ApiHospitalizationController::class);
     Route::put('hospitalizations/{hospitalization}/discharge', [ApiHospitalizationController::class, 'discharge']);
