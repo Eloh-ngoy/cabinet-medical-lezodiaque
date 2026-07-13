@@ -10,6 +10,7 @@ use App\Models\Medication;
 use App\Models\Patient;
 use App\Models\RendezVous;
 use App\Models\User;
+
 use App\Policies\AppointmentPolicy;
 use App\Policies\ConsultationPolicy;
 use App\Policies\HospitalizationPolicy;
@@ -17,7 +18,9 @@ use App\Policies\LaboratoryAnalysisPolicy;
 use App\Policies\MedicationPolicy;
 use App\Policies\PatientPolicy;
 use App\Policies\UserPolicy;
+
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +32,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Force HTTPS in production (Render)
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
+
         Gate::policy(Patient::class, PatientPolicy::class);
         Gate::policy(Consultation::class, ConsultationPolicy::class);
         Gate::policy(RendezVous::class, AppointmentPolicy::class);
