@@ -7,8 +7,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-$user->assignRole($role);
-$user->givePermissionTo(Permission::all());
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,6 +30,14 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Donner le rôle admin
         $user->assignRole($role);
+
+        // Donner toutes les permissions disponibles
+        $permissions = Permission::all();
+
+        if ($permissions->count() > 0) {
+            $user->givePermissionTo($permissions);
+        }
     }
 }
