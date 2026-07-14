@@ -10,6 +10,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    public function can($ability, $arguments = [])
+    {
+        if ($this->hasRole('admin')) {
+            return true;
+        }
+
+        return parent::can($ability, $arguments);
+    }
     use HasFactory, Notifiable, HasRoles;
 
     /**
