@@ -13,7 +13,8 @@
         <h1 class="text-2xl font-bold text-gray-900 mt-4">Nouvelle Consultation</h1>
     </div>
 
-    <form method="POST" action="{{ route('consultations.store') }}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <form method="POST" action="{{ route('consultations.store') }}"
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @csrf
 
         @if ($errors->any())
@@ -29,42 +30,52 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Patient</label>
-                <select name="patient_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="patient_id" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Sélectionner un patient</option>
                     @foreach($patients as $p)
-                        <option value="{{ $p->id }}" {{ $patient && $patient->id == $p->id ? 'selected' : '' }}>{{ $p->nom }} {{ $p->prenom }} ({{ $p->numero_unique }})</option>
+                        <option value="{{ $p->id }}" {{ $patient && $patient->id == $p->id ? 'selected' : '' }}>{{ $p->nom }}
+                            {{ $p->prenom }} ({{ $p->numero_unique }})</option>
                     @endforeach
                 </select>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date de consultation</label>
-                <input type="datetime-local" name="date_consultation" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <input type="datetime-local" name="date_consultation" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Motif</label>
-                <input type="text" name="motif" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" name="motif" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Diagnostic</label>
-                <textarea name="diagnostic" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <textarea name="diagnostic" rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Traitement</label>
-                <textarea name="traitement" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <textarea name="traitement" rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Ordonnance</label>
-                <textarea name="ordonnance" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <textarea name="ordonnance" rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Prix (€)</label>
-                <input type="number" step="0.01" name="prix" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Prix (CDF)</label>
+                <input type="number" step="0.01" name="prix" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
         </div>
 
         <div class="mt-6 flex justify-end gap-4">
-            <a href="{{ route('consultations.index') }}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">Annuler</a>
-            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Créer la consultation</button>
+            <a href="{{ route('consultations.index') }}"
+                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">Annuler</a>
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Créer la
+                consultation</button>
         </div>
     </form>
 @endsection

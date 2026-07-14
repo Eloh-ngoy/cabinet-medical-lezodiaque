@@ -48,7 +48,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $medication->category ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $medication->stock_quantity }} {{ $medication->unit }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $medication->min_stock_threshold }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($medication->unit_price, 2) }} €</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($medication->unit_price, 2) }}CDF</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 @if($medication->isLowStock())
                                     <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Stock faible</span>
