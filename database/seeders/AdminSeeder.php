@@ -10,7 +10,7 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::updateOrCreate(
+        User::updateOrCreate(
             ['username' => 'admin'],
             [
                 'email' => 'admin@lezodiaque.com',
@@ -20,7 +20,5 @@ class AdminSeeder extends Seeder
                 'must_change_password' => false,
             ]
         );
-
-        $admin->assignRole('Directeur Général Médecin');
     }
 }
