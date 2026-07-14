@@ -28,12 +28,15 @@ else
     echo "Database already has $USER_COUNT users. Skipping seed."
 fi
 
-# Cache configuration for production
 echo "Caching config..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan event:cache
+
+echo "Fixing permissions..."
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 echo "=== Starting Apache ==="
 apache2-foreground
