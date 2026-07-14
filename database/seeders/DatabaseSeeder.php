@@ -57,8 +57,12 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-
         // Attribuer le rôle admin à l'utilisateur
         $user->syncRoles(['admin']);
+
+        // Créer les lits
+        $this->call([
+            BedSeeder::class,
+        ]);
     }
 }

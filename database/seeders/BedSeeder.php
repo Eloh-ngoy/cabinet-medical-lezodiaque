@@ -20,11 +20,6 @@ class BedSeeder extends Seeder
             8 => 'électrique',
             9 => 'électrique',
             10 => 'électrique',
-            11 => 'soins intensifs',
-            12 => 'soins intensifs',
-            13 => 'soins intensifs',
-            14 => 'soins intensifs',
-            15 => 'soins intensifs',
         ];
 
         foreach ($types as $number => $type) {
@@ -32,7 +27,7 @@ class BedSeeder extends Seeder
                 ['bed_number' => $number],
                 [
                     'bed_type' => $type,
-                    'room_number' => (int) ceil($number / 3),
+                    'room_number' => (int) ceil($number / 2),
                     'is_available' => true,
                 ]
             );
