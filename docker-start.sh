@@ -17,6 +17,9 @@ fi
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Creating admin user..."
+php artisan db:seed --force
+
 echo "Clearing Laravel cache..."
 php artisan config:clear
 php artisan cache:clear || true
