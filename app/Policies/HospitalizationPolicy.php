@@ -19,21 +19,21 @@ class HospitalizationPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create hospitalization');
+        return $user->hasRole('admin');
     }
 
     public function update(User $user, Hospitalization $hospitalization): bool
     {
-        return $user->can('edit hospitalization');
+        return $user->hasRole('admin');
     }
 
     public function delete(User $user, Hospitalization $hospitalization): bool
     {
-        return $user->can('edit hospitalization');
+        return $user->hasRole('admin');
     }
 
     public function discharge(User $user, Hospitalization $hospitalization): bool
     {
-        return $user->can('discharge patient');
+        return $user->hasRole('admin');
     }
 }

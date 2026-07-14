@@ -19,16 +19,16 @@ class AppointmentPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create appointment');
+        return $user->hasRole('admin');
     }
 
     public function update(User $user, RendezVous $appointment): bool
     {
-        return $user->can('edit appointment');
+        return $user->hasRole('admin');
     }
 
     public function delete(User $user, RendezVous $appointment): bool
     {
-        return $user->can('delete appointment');
+        return $user->hasRole('admin');
     }
 }

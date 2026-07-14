@@ -19,21 +19,26 @@ class LaboratoryAnalysisPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create lab request');
+        return $user->hasRole('admin');
     }
 
     public function enterResults(User $user, LaboratoryAnalysis $laboratoryAnalysis): bool
     {
-        return $user->can('enter lab results');
+        return $user->hasRole('admin');
     }
 
     public function validateResults(User $user, LaboratoryAnalysis $laboratoryAnalysis): bool
     {
-        return $user->can('validate lab results');
+        return $user->hasRole('admin');
     }
 
     public function update(User $user, LaboratoryAnalysis $laboratoryAnalysis): bool
     {
-        return $user->can('enter lab results');
+        return $user->hasRole('admin');
+    }
+
+    public function delete(User $user, LaboratoryAnalysis $laboratoryAnalysis): bool
+    {
+        return $user->hasRole('admin');
     }
 }

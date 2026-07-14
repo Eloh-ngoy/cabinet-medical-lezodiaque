@@ -19,16 +19,16 @@ class ConsultationPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('create consultation');
+        return $user->hasRole('admin');
     }
 
     public function update(User $user, Consultation $consultation): bool
     {
-        return $user->can('edit consultation');
+        return $user->hasRole('admin');
     }
 
     public function delete(User $user, Consultation $consultation): bool
     {
-        return $user->can('delete consultation');
+        return $user->hasRole('admin');
     }
 }
