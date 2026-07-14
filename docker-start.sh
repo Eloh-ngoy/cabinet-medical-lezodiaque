@@ -2,6 +2,7 @@
 set -e
 
 echo "=== MediNexus Starting ==="
+echo "APP_KEY length: ${#APP_KEY}"
 
 # Wait for PostgreSQL
 if [ -n "$DATABASE_URL" ]; then
@@ -17,7 +18,8 @@ echo "Running migrations..."
 php artisan migrate --force
 
 echo "Clearing Laravel cache..."
-php artisan optimize:clear || true
+php artisan config:clear
+php artisan cache:clear || true
 
 echo "Caching config..."
 php artisan config:cache
