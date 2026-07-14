@@ -12,11 +12,37 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $role = Role::firstOrCreate([
-            'name' => 'admin',
-            'guard_name' => 'web'
-        ]);
+        // Création des rôles du système
+        $roles = [
+            'admin',
+            'doctor',
+            'nurse',
+            'pharmacist',
+            'laboratory',
+            'receptionist',
+        ];
 
+        foreach ($roles as $roleName) {
+            Role::firstOrCreate([
+                'name' => $roleName,
+                'guard_name' => 'web'
+            ]);
+        }
+
+
+        // Récupérer le rôle admin
+        $adminRole = Role::where('name', 'admin')
+            ->where('guard_name', 'web')
+            ->first();
+
+
+        // Donner toutes les permissions au rôle admin
+        if ($adminRole) {
+            $adminRole->syncPermissions(Permission::all());
+        }
+
+
+        // Création du compte administrateur
         $user = User::firstOrCreate(
             [
                 'username' => 'admin'
@@ -27,17 +53,12 @@ class DatabaseSeeder extends Seeder
                 'matricule' => 'MED-001',
                 'password' => Hash::make('admin123'),
                 'must_change_password' => false,
+                'role' => 'doctor',
             ]
         );
 
-        // Donner le rôle admin
-        $user->assignRole($role);
 
-        // Donner toutes les permissions disponibles
-        $permissions = Permission::all();
-
-        if ($permissions->count() > 0) {
-            $user->givePermissionTo($permissions);
-        }
+        // Attribuer le rôle admin à l'utilisateur
+        $user->syncRoles(['admin']);
     }
 }
