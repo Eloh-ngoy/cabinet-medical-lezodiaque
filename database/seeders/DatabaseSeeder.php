@@ -36,9 +36,36 @@ class DatabaseSeeder extends Seeder
             ->first();
 
 
-        // Donner toutes les permissions au rôle admin
-        if ($adminRole) {
-            $adminRole->syncPermissions(Permission::all());
+        // Récupérer les rôles
+        $admin = Role::where('name', 'admin')->first();
+        $doctor = Role::where('name', 'doctor')->first();
+        $nurse = Role::where('name', 'nurse')->first();
+        $pharmacist = Role::where('name', 'pharmacist')->first();
+        $laboratory = Role::where('name', 'laboratory')->first();
+        $receptionist = Role::where('name', 'receptionist')->first();
+
+
+        // ADMIN : toutes les permissions
+        if ($admin) {
+            $admin->syncPermissions(Permission::all());
+        }
+
+
+        // Permissions de consultation uniquement
+        $viewPermissions = [
+            'view patients',
+            'search patients',
+            'view all records',
+        ];
+
+
+        // Autres utilisateurs : lecture seulement
+        foreach ([$doctor, $nurse, $pharmacist, $laboratory, $receptionist] as $role) {
+            if ($role) {
+                $role->syncPermissions(
+                    Permission::whereIn('name', $viewPermissions)->get()
+                );
+            }
         }
 
 
