@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+$user->assignRole($role);
+$user->givePermissionTo(Permission::all());
 
 class DatabaseSeeder extends Seeder
 {
