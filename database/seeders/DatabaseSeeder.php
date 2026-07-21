@@ -87,7 +87,20 @@ class DatabaseSeeder extends Seeder
                 );
             }
         }
+        // Synchroniser les rôles des utilisateurs existants
+        $users = User::all();
 
+        foreach ($users as $user) {
+
+            if ($user->username !== 'admin' && $user->role) {
+
+                $role = Role::where('name', $user->role)->first();
+
+                if ($role) {
+                    $user->syncRoles([$role]);
+                }
+            }
+        }
 
         // Création du compte administrateur
         $user = User::firstOrCreate(
