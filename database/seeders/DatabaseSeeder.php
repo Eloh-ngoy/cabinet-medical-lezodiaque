@@ -53,9 +53,29 @@ class DatabaseSeeder extends Seeder
 
         // Permissions de consultation uniquement
         $viewPermissions = [
+            'view all records',
+
+            // Patients
             'view patients',
             'search patients',
-            'view all records',
+
+            // Consultations
+            'view consultations',
+            'view consultation details',
+
+            // Rendez-vous
+            'view appointments',
+            'view appointment details',
+
+            // Hospitalisations
+            'view hospitalizations',
+
+            // Laboratoire
+            'view lab requests',
+            'view lab results',
+
+            // Pharmacie
+            'view prescriptions',
         ];
 
 
