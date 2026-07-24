@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossier Médical Complet</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -310,7 +308,12 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Contact Urgence:</span>
-                    <span class="info-value">{{ $patient->contact_urgence }}</span>
+                    <span class="info-value">
+                        {{ $patient->contact_urgence_nom ?? 'Non renseigné' }}
+                        @if($patient->contact_urgence_telephone)
+                            ({{ $patient->contact_urgence_telephone }})
+                        @endif
+                    </span>
                 </div>
             </div>
         </div>
@@ -326,15 +329,15 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Allergies:</span>
-                        <span class="info-value">{{ $patient->allergies ?? 'Aucune connue' }}</span>
+                        <span class="info-value">{{ is_array($patient->allergies) ? implode(', ', $patient->allergies) : ($patient->allergies ?? 'Aucune connue') }}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Antécédents:</span>
-                        <span class="info-value">{{ $patient->antecedents ?? 'Aucun' }}</span>
+                        <span class="info-value">{{ is_array($patient->antecedents) ? implode(', ', $patient->antecedents) : ($patient->antecedents ?? 'Aucun') }}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Maladies Chroniques:</span>
-                        <span class="info-value">{{ $patient->maladies_chroniques ?? 'Aucune' }}</span>
+                        <span class="info-value">{{ is_array($patient->maladies_chroniques) ? implode(', ', $patient->maladies_chroniques) : ($patient->maladies_chroniques ?? 'Aucune') }}</span>
                     </div>
                 </div>
             </div>

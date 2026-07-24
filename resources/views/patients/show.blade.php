@@ -62,7 +62,7 @@
                                 + Nouveau Rendez-vous
                             </a>
                         @endif
-                        @if(auth()->user()->can('export medical record') || auth()->user()->can('export medical summary'))
+                        @if(auth()->user()->can('export medical record') || auth()->user()->can('export medical summary') || auth()->user()->can('export prescription') || auth()->user()->can('export prescription history') || auth()->user()->can('export consultation report') || auth()->user()->can('export hospitalization report') || auth()->user()->can('export laboratory report') || auth()->user()->can('export patient audit'))
                             <a href="{{ route('patients.export', $patient) }}" class="block w-full text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                                 📄 Exports PDF
                             </a>

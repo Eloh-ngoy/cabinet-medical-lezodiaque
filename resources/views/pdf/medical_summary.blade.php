@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résumé Médical</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -231,7 +229,12 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Contact Urgence:</span>
-                    <span class="info-value">{{ $patient->contact_urgence }}</span>
+                    <span class="info-value">
+                        {{ $patient->contact_urgence_nom ?? 'Non renseigné' }}
+                        @if($patient->contact_urgence_telephone)
+                            ({{ $patient->contact_urgence_telephone }})
+                        @endif
+                    </span>
                 </div>
             </div>
         </div>
@@ -244,13 +247,13 @@
                 @if($patient->allergies)
                 <div class="info-row">
                     <span class="info-label">Allergies:</span>
-                    <span class="info-value alert">{{ $patient->allergies }}</span>
+                    <span class="info-value alert">{{ is_array($patient->allergies) ? implode(', ', $patient->allergies) : $patient->allergies }}</span>
                 </div>
                 @endif
                 @if($patient->maladies_chroniques)
                 <div class="info-row">
                     <span class="info-label">Maladies Chroniques:</span>
-                    <span class="info-value alert">{{ $patient->maladies_chroniques }}</span>
+                    <span class="info-value alert">{{ is_array($patient->maladies_chroniques) ? implode(', ', $patient->maladies_chroniques) : $patient->maladies_chroniques }}</span>
                 </div>
                 @endif
             </div>
@@ -303,7 +306,7 @@
         <div class="section">
             <h2 class="section-title">Antécédents Médicaux</h2>
             <div class="summary-item">
-                {{ $patient->antecedents }}
+                {{ is_array($patient->antecedents) ? implode(', ', $patient->antecedents) : $patient->antecedents }}
             </div>
         </div>
         @endif

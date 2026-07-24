@@ -74,4 +74,21 @@ class Patient extends BaseModel
     {
         return $this->hasMany(LaboratoryAnalysis::class);
     }
+
+    public function getContactUrgenceAttribute(): string
+    {
+        if ($this->contact_urgence_nom && $this->contact_urgence_telephone) {
+            return sprintf('%s (%s)', $this->contact_urgence_nom, $this->contact_urgence_telephone);
+        }
+
+        if ($this->contact_urgence_nom) {
+            return $this->contact_urgence_nom;
+        }
+
+        if ($this->contact_urgence_telephone) {
+            return $this->contact_urgence_telephone;
+        }
+
+        return 'Non renseigné';
+    }
 }

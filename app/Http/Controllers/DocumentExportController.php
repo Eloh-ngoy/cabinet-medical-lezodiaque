@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\DB;
 
 class DocumentExportController extends Controller
 {
+    public function __construct()
+    {
+        PDF::setOptions([
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+        ]);
+    }
 
     /**
      * Journalise la génération d'un document
@@ -51,18 +58,17 @@ class DocumentExportController extends Controller
     protected function checkExportPermission(string $type): bool
     {
         $user = Auth::user();
-        $role = $user->roles->first()->name ?? null;
 
         return match ($type) {
-            'dossier_medical', 'resume_medical', 'rapport_consultation', 'rapport_hospitalisation' =>
-                in_array($role, ['Directeur Général Médecin', 'Médecin']),
-            'ordonnance', 'historique_prescriptions' =>
-                in_array($role, ['Directeur Général Médecin', 'Médecin', 'Pharmacien']),
-            'rapport_laboratoire' =>
-                in_array($role, ['Directeur Général Médecin', 'Médecin', 'Laborantin']),
-            'audit_patient' =>
-                $role === 'Directeur Général Médecin',
-            default => false
+            'dossier_medical' => $user->can('export medical record'),
+            'resume_medical' => $user->can('export medical summary'),
+            'ordonnance' => $user->can('export prescription'),
+            'historique_prescriptions' => $user->can('export prescription history'),
+            'rapport_consultation' => $user->can('export consultation report'),
+            'rapport_hospitalisation' => $user->can('export hospitalization report'),
+            'rapport_laboratoire' => $user->can('export laboratory report'),
+            'audit_patient' => $user->can('export patient audit'),
+            default => false,
         };
     }
 
@@ -419,9 +425,23 @@ class DocumentExportController extends Controller
     /**
      * Affiche l'interface d'export
      */
+    protected function canAccessExportInterface(): bool
+    {
+        $user = Auth::user();
+
+        return $user->can('export medical record')
+            || $user->can('export medical summary')
+            || $user->can('export prescription')
+            || $user->can('export prescription history')
+            || $user->can('export consultation report')
+            || $user->can('export hospitalization report')
+            || $user->can('export laboratory report')
+            || $user->can('export patient audit');
+    }
+
     public function showExportInterface(Patient $patient)
     {
-        if (!Auth::user()->can('export medical record') && !Auth::user()->can('export medical summary')) {
+        if (!$this->canAccessExportInterface()) {
             abort(403);
         }
 

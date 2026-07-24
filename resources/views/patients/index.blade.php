@@ -8,9 +8,11 @@
                 <h1 class="text-2xl font-bold text-gray-900">Patients</h1>
                 <p class="text-gray-600 mt-1">Gestion des patients</p>
             </div>
-            <a href="{{ route('patients.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium">
-                + Nouveau Patient
-            </a>
+            @can('create patient')
+                <a href="{{ route('patients.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                    + Nouveau Patient
+                </a>
+            @endcan
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100">
@@ -55,12 +57,14 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <a href="{{ route('patients.show', $patient) }}" class="text-blue-600 hover:text-blue-900 mr-3">Voir</a>
-                                    <a href="{{ route('patients.edit', $patient) }}" class="text-gray-600 hover:text-gray-900 mr-3">Modifier</a>
-                                    <form action="{{ route('patients.destroy', $patient) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient ?')">Supprimer</button>
-                                    </form>
+                                    @can('edit patient')
+                                        <a href="{{ route('patients.edit', $patient) }}" class="text-gray-600 hover:text-gray-900 mr-3">Modifier</a>
+                                        <form action="{{ route('patients.destroy', $patient) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient ?')">Supprimer</button>
+                                        </form>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty
