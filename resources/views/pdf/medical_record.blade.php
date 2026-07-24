@@ -292,11 +292,11 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Date de Naissance:</span>
-                    <span class="info-value">{{ $patient->date_naissance->format('d/m/Y') }}</span>
+                    <span class="info-value">{{ $patient->date_naissance?->format('d/m/Y') ?? 'Non renseigné' }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Âge:</span>
-                    <span class="info-value">{{ $patient->date_naissance->age }} ans</span>
+                    <span class="info-value">{{ $patient->date_naissance?->age ? $patient->date_naissance->age . ' ans' : 'Non renseigné' }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Téléphone:</span>
@@ -350,7 +350,7 @@
             <div class="consultation-item">
                 <div class="consultation-header">
                     <span>Dr. {{ $consultation->user->full_name ?? 'Non renseigné' }}</span>
-                    <span class="consultation-date">{{ $consultation->date_consultation->format('d/m/Y H:i') }}</span>
+                    <span class="consultation-date">{{ $consultation->date_consultation?->format('d/m/Y H:i') ?? 'Date inconnue' }}</span>
                 </div>
                 <div class="consultation-details">
                     <strong>Motif:</strong> {{ $consultation->motif }}<br>
@@ -378,7 +378,7 @@
             <div class="consultation-item" style="border-left-color: #10b981;">
                 <div class="consultation-header">
                     <span>Service: {{ $hospitalization->service ?? 'Non renseigné' }}</span>
-                    <span class="consultation-date">{{ $hospitalization->date_entree->format('d/m/Y') }} - {{ $hospitalization->date_sortie?->format('d/m/Y') ?? 'En cours' }}</span>
+                    <span class="consultation-date">{{ $hospitalization->date_entree?->format('d/m/Y') ?? 'Date entrée inconnue' }} - {{ $hospitalization->date_sortie?->format('d/m/Y') ?? 'En cours' }}</span>
                 </div>
                 <div class="consultation-details">
                     <strong>Chambre:</strong> {{ $hospitalization->bed?->numero ?? 'Non renseigné' }}<br>
@@ -394,8 +394,8 @@
             <div class="footer-content">
                 <div>
                     <strong>MediNexus - Système d'Information Hospitalier</strong><br>
-                    Date de génération: {{ $document->generated_at->format('d/m/Y H:i') }}<br>
-                    Généré par: {{ $document->user->full_name }}
+                    Date de génération: {{ $document->generated_at?->format('d/m/Y H:i') ?? 'Date inconnue' }}<br>
+                    Généré par: {{ $document->user->full_name ?? 'Utilisateur inconnu' }}
                 </div>
                 <div class="qr-section">
                     <div class="code-unique">
