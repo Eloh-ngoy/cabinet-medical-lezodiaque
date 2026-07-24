@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -29,12 +30,13 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // Créer les permissions de base avant d'assigner les rôles
+        $this->call(PermissionSeeder::class);
 
         // Récupérer le rôle admin
         $adminRole = Role::where('name', 'admin')
             ->where('guard_name', 'web')
             ->first();
-
 
         // Récupérer les rôles
         $admin = Role::where('name', 'admin')->first();
