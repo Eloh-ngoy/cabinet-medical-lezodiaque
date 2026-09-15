@@ -2,10 +2,12 @@ services:
   - type: web
     name: medinexus
     runtime: docker
-    plan: free
+        value: file
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /up
+        value: file
     autoDeploy: true
+      # Run migrations and other release tasks after the image is deployed
+      releaseCommand: "php artisan migrate --force && php artisan db:seed --force && php artisan storage:link || true"
     envVars:
       - key: APP_ENV
         value: production
