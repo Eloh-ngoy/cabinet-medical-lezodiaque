@@ -12,6 +12,38 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
+// Early runtime: if DB host is not resolvable, force file drivers to avoid
+// bootstrapping session/cache stores that require DB connectivity.
+try {
+    $raw = getenv('DATABASE_URL') ?: getenv('DB_URL') ?: null;
+    $dbHost = null;
+    if ($raw) {
+        $parts = @parse_url($raw);
+        if ($parts !== false && isset($parts['host'])) {
+            $dbHost = $parts['host'];
+        }
+    }
+    if (!$dbHost) {
+        $dbHost = getenv('DB_HOST') ?: getenv('PGHOST') ?: null;
+    }
+    if ($dbHost) {
+        $resolved = @gethostbyname($dbHost);
+        if (!$resolved || $resolved === $dbHost) {
+            putenv('SESSION_DRIVER=file');
+            putenv('CACHE_DRIVER=file');
+            error_log("[index] DB host '{$dbHost}' not resolvable; forcing SESSION_DRIVER=file and CACHE_DRIVER=file\n");
+        }
+    } else {
+        putenv('SESSION_DRIVER=file');
+        putenv('CACHE_DRIVER=file');
+        error_log('[index] No DB host env found; forcing SESSION_DRIVER=file and CACHE_DRIVER=file\n');
+    }
+} catch (Throwable $e) {
+    putenv('SESSION_DRIVER=file');
+    putenv('CACHE_DRIVER=file');
+    error_log('[index] Exception checking DB host; forcing file drivers\n');
+}
+
 // Bootstrap Laravel and handle the request...
 (require_once __DIR__.'/../bootstrap/app.php')
     ->handleRequest(Request::capture());
