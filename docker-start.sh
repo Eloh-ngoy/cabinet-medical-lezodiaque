@@ -77,24 +77,8 @@ wait_and_migrate() {
 # Start background migration runner (non-blocking)
 wait_and_migrate &
 
-echo "Running migrations..."
-php artisan migrate --force
-
-echo "Seeding database and permissions..."
-php artisan db:seed --force
-php artisan permission:cache-reset
-
-echo "Clearing Laravel cache..."
-php artisan config:clear
-php artisan cache:clear || true
-php artisan route:clear || true
-php artisan view:clear || true
-
-echo "Caching config..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan event:cache
+echo "Migrations/seeders will run in background when DB becomes available."
+echo "Clearing caches will be performed after migrations in background job."
 
 echo "=== Starting Apache ==="
 exec apache2-foreground
