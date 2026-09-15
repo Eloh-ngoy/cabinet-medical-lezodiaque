@@ -32,11 +32,22 @@ try {
             putenv('SESSION_DRIVER=file');
             putenv('CACHE_DRIVER=file');
             error_log("[index] DB host '{$dbHost}' not resolvable; forcing SESSION_DRIVER=file and CACHE_DRIVER=file\n");
+            // Remove cached config so Laravel reads env at runtime
+            $configCache = __DIR__ . '/../bootstrap/cache/config.php';
+            if (file_exists($configCache)) {
+                @unlink($configCache);
+                error_log("[index] Removed config cache at {$configCache}\n");
+            }
         }
     } else {
         putenv('SESSION_DRIVER=file');
         putenv('CACHE_DRIVER=file');
         error_log('[index] No DB host env found; forcing SESSION_DRIVER=file and CACHE_DRIVER=file\n');
+        $configCache = __DIR__ . '/../bootstrap/cache/config.php';
+        if (file_exists($configCache)) {
+            @unlink($configCache);
+            error_log("[index] Removed config cache at {$configCache}\n");
+        }
     }
 } catch (Throwable $e) {
     putenv('SESSION_DRIVER=file');
