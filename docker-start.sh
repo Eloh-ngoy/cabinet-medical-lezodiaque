@@ -4,6 +4,16 @@ set -e
 echo "=== MediNexus Starting ==="
 echo "APP_KEY length: ${#APP_KEY}"
 
+# Sanitize DATABASE_URL/DB_URL (remove CR/LF that can break hostnames)
+if [ -n "$DATABASE_URL" ]; then
+    export DATABASE_URL="$(printf "%s" "$DATABASE_URL" | tr -d '\r\n')"
+    echo "Sanitized DATABASE_URL"
+fi
+if [ -n "$DB_URL" ]; then
+    export DB_URL="$(printf "%s" "$DB_URL" | tr -d '\r\n')"
+    echo "Sanitized DB_URL"
+fi
+
 # Configure Apache to listen on Render-provided $PORT (default 80)
 PORT=${PORT:-80}
 echo "Configuring Apache to listen on port $PORT"
@@ -79,6 +89,10 @@ wait_and_migrate &
 
 echo "Migrations/seeders will run in background when DB becomes available."
 echo "Clearing caches will be performed after migrations in background job."
+
+echo "Clearing config cache to ensure runtime env vars are used"
+php artisan config:clear || true
+php artisan cache:clear || true
 
 echo "=== Starting Apache ==="
 exec apache2-foreground
