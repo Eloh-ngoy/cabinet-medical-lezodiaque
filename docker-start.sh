@@ -6,11 +6,12 @@ echo "APP_KEY length: ${#APP_KEY}"
 
 # Sanitize DATABASE_URL/DB_URL (remove CR/LF that can break hostnames)
 if [ -n "$DATABASE_URL" ]; then
-    export DATABASE_URL="$(printf "%s" "$DATABASE_URL" | tr -d '\r\n' | sed -E 's/[[:space:]]+//g')"
+    # Remove CR/LF, surrounding quotes and stray whitespace
+    export DATABASE_URL="$(printf "%s" "$DATABASE_URL" | tr -d '\r\n' | sed -E "s/^[[:space:]\"']+//; s/[[:space:]\"']+$//; s/[[:space:]]+//g")"
     echo "Sanitized DATABASE_URL"
 fi
 if [ -n "$DB_URL" ]; then
-    export DB_URL="$(printf "%s" "$DB_URL" | tr -d '\r\n' | sed -E 's/[[:space:]]+//g')"
+    export DB_URL="$(printf "%s" "$DB_URL" | tr -d '\r\n' | sed -E "s/^[[:space:]\"']+//; s/[[:space:]\"']+$//; s/[[:space:]]+//g")"
     echo "Sanitized DB_URL"
 fi
 
@@ -31,8 +32,21 @@ wait_and_migrate() {
     fi
 
     echo "Background DB watcher started..."
+    diagnose_db() {
+        php -r '
+            $url = getenv("DB_URL") ?: getenv("DATABASE_URL");
+            $parts = $url ? parse_url($url) : false;
+            if ($parts === false) { echo "[diag] parse_url failed\n"; exit(1); }
+            $host = $parts["host"] ?? getenv("DB_HOST") ?? "";
+            $port = $parts["port"] ?? getenv("DB_PORT") ?? 5432;
+            echo "[diag] DB host={$host} port={$port}\n";
+            if ($host) { $ip = gethostbyname($host); echo "[diag] gethostbyname={$ip}\n"; }
+            exit(0);
+        '
+    }
     # Initial aggressive attempts
     for i in $(seq 1 60); do
+        diagnose_db || true
         php -r '
             $url = getenv("DB_URL") ?: getenv("DATABASE_URL");
             if (!$url) exit(1);
@@ -60,6 +74,7 @@ wait_and_migrate() {
     # If initial attempts failed, switch to indefinite retry with longer interval
     echo "Database not ready after initial attempts — switching to infinite retry every 30s."
     while true; do
+        diagnose_db || true
         php -r '
             $url = getenv("DB_URL") ?: getenv("DATABASE_URL");
             if (!$url) exit(1);
