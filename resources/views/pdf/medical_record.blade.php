@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -247,16 +248,19 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         @if($watermark)
-        <div class="watermark">{{ $watermark }}</div>
+            <div class="watermark">{{ $watermark }}</div>
         @endif
 
         <div class="header">
             <div class="logo">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                    </path>
                 </svg>
             </div>
             <h1 class="establishment-name">MediNexus</h1>
@@ -269,11 +273,11 @@
             <h2 class="section-title">Informations Administratives</h2>
             <div class="patient-info">
                 @if($patient->photo)
-                <div class="patient-photo">
-                    <img src="{{ asset($patient->photo) }}" alt="Photo du patient">
-                </div>
+                    <div class="patient-photo">
+                        <img src="{{ asset($patient->photo) }}" alt="Photo du patient">
+                    </div>
                 @endif
-                
+
                 <div class="info-row">
                     <span class="info-label">Numéro Patient:</span>
                     <span class="info-value">{{ $patient->numero_unique }}</span>
@@ -296,7 +300,8 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Âge:</span>
-                    <span class="info-value">{{ $patient->date_naissance?->age ? $patient->date_naissance->age . ' ans' : 'Non renseigné' }}</span>
+                    <span
+                        class="info-value">{{ $patient->date_naissance?->age ? $patient->date_naissance->age . ' ans' : 'Non renseigné' }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Téléphone:</span>
@@ -329,15 +334,18 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Allergies:</span>
-                        <span class="info-value">{{ is_array($patient->allergies) ? implode(', ', $patient->allergies) : ($patient->allergies ?? 'Aucune connue') }}</span>
+                        <span
+                            class="info-value">{{ is_array($patient->allergies) ? implode(', ', $patient->allergies) : ($patient->allergies ?? 'Aucune connue') }}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Antécédents:</span>
-                        <span class="info-value">{{ is_array($patient->antecedents) ? implode(', ', $patient->antecedents) : ($patient->antecedents ?? 'Aucun') }}</span>
+                        <span
+                            class="info-value">{{ is_array($patient->antecedents) ? implode(', ', $patient->antecedents) : ($patient->antecedents ?? 'Aucun') }}</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Maladies Chroniques:</span>
-                        <span class="info-value">{{ is_array($patient->maladies_chroniques) ? implode(', ', $patient->maladies_chroniques) : ($patient->maladies_chroniques ?? 'Aucune') }}</span>
+                        <span
+                            class="info-value">{{ is_array($patient->maladies_chroniques) ? implode(', ', $patient->maladies_chroniques) : ($patient->maladies_chroniques ?? 'Aucune') }}</span>
                     </div>
                 </div>
             </div>
@@ -347,27 +355,28 @@
         <div class="section">
             <h2 class="section-title">Historique des Consultations</h2>
             @forelse($patient->consultations->sortByDesc('date_consultation') as $consultation)
-            <div class="consultation-item">
-                <div class="consultation-header">
-                    <span>Dr. {{ $consultation->user->full_name ?? 'Non renseigné' }}</span>
-                    <span class="consultation-date">{{ $consultation->date_consultation?->format('d/m/Y H:i') ?? 'Date inconnue' }}</span>
+                <div class="consultation-item">
+                    <div class="consultation-header">
+                        <span>Dr. {{ $consultation->user->full_name ?? 'Non renseigné' }}</span>
+                        <span
+                            class="consultation-date">{{ $consultation->date_consultation?->format('d/m/Y H:i') ?? 'Date inconnue' }}</span>
+                    </div>
+                    <div class="consultation-details">
+                        <strong>Motif:</strong> {{ $consultation->motif }}<br>
+                        @if($consultation->diagnostic)
+                            <strong>Diagnostic:</strong> {{ $consultation->diagnostic }}<br>
+                        @endif
+                        @if($consultation->traitement)
+                            <strong>Traitement:</strong> {{ $consultation->traitement }}<br>
+                        @endif
+                        @if($consultation->ordonnance)
+                            <strong>Ordonnance:</strong> {{ $consultation->ordonnance }}<br>
+                        @endif
+                        <strong>Prix:</strong> {{ number_format($consultation->prix, 0) }} CDF
+                    </div>
                 </div>
-                <div class="consultation-details">
-                    <strong>Motif:</strong> {{ $consultation->motif }}<br>
-                    @if($consultation->diagnostic)
-                    <strong>Diagnostic:</strong> {{ $consultation->diagnostic }}<br>
-                    @endif
-                    @if($consultation->traitement)
-                    <strong>Traitement:</strong> {{ $consultation->traitement }}<br>
-                    @endif
-                    @if($consultation->ordonnance)
-                    <strong>Ordonnance:</strong> {{ $consultation->ordonnance }}<br>
-                    @endif
-                    <strong>Prix:</strong> {{ number_format($consultation->prix, 0) }} CDF
-                </div>
-            </div>
             @empty
-            <p style="color: #64748b;">Aucune consultation enregistrée</p>
+                <p style="color: #64748b;">Aucune consultation enregistrée</p>
             @endforelse
         </div>
 
@@ -375,18 +384,20 @@
         <div class="section">
             <h2 class="section-title">Historique des Hospitalisations</h2>
             @forelse($patient->hospitalizations->sortByDesc('date_entree') as $hospitalization)
-            <div class="consultation-item" style="border-left-color: #10b981;">
-                <div class="consultation-header">
-                    <span>Service: {{ $hospitalization->service ?? 'Non renseigné' }}</span>
-                    <span class="consultation-date">{{ $hospitalization->date_entree?->format('d/m/Y') ?? 'Date entrée inconnue' }} - {{ $hospitalization->date_sortie?->format('d/m/Y') ?? 'En cours' }}</span>
+                <div class="consultation-item" style="border-left-color: #10b981;">
+                    <div class="consultation-header">
+                        <span>Service: {{ $hospitalization->service ?? 'Non renseigné' }}</span>
+                        <span
+                            class="consultation-date">{{ $hospitalization->date_entree?->format('d/m/Y') ?? 'Date entrée inconnue' }}
+                            - {{ $hospitalization->date_sortie?->format('d/m/Y') ?? 'En cours' }}</span>
+                    </div>
+                    <div class="consultation-details">
+                        <strong>Chambre:</strong> {{ $hospitalization->bed?->numero ?? 'Non renseigné' }}<br>
+                        <strong>Observations:</strong> {{ $hospitalization->observations ?? 'Non renseigné' }}
+                    </div>
                 </div>
-                <div class="consultation-details">
-                    <strong>Chambre:</strong> {{ $hospitalization->bed?->numero ?? 'Non renseigné' }}<br>
-                    <strong>Observations:</strong> {{ $hospitalization->observations ?? 'Non renseigné' }}
-                </div>
-            </div>
             @empty
-            <p style="color: #64748b;">Aucune hospitalisation enregistrée</p>
+                <p style="color: #64748b;">Aucune hospitalisation enregistrée</p>
             @endforelse
         </div>
 
@@ -414,17 +425,20 @@
         .qr-section {
             text-align: center;
         }
+
         .code-unique {
             background: #f8fafc;
             padding: 8px 12px;
             border-radius: 6px;
             border: 2px solid #e2e8f0;
         }
+
         .code-label {
             font-size: 10px;
             color: #64748b;
             margin-bottom: 4px;
         }
+
         .code-value {
             font-size: 14px;
             font-weight: 700;
@@ -433,4 +447,5 @@
         }
     </style>
 </body>
+
 </html>
