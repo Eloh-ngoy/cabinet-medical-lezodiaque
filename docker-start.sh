@@ -6,11 +6,11 @@ echo "APP_KEY length: ${#APP_KEY}"
 
 # Sanitize DATABASE_URL/DB_URL (remove CR/LF that can break hostnames)
 if [ -n "$DATABASE_URL" ]; then
-    export DATABASE_URL="$(printf "%s" "$DATABASE_URL" | tr -d '\r\n')"
+    export DATABASE_URL="$(printf "%s" "$DATABASE_URL" | tr -d '\r\n' | sed -E 's/[[:space:]]+//g')"
     echo "Sanitized DATABASE_URL"
 fi
 if [ -n "$DB_URL" ]; then
-    export DB_URL="$(printf "%s" "$DB_URL" | tr -d '\r\n')"
+    export DB_URL="$(printf "%s" "$DB_URL" | tr -d '\r\n' | sed -E 's/[[:space:]]+//g')"
     echo "Sanitized DB_URL"
 fi
 
@@ -93,6 +93,16 @@ echo "Clearing caches will be performed after migrations in background job."
 echo "Clearing config cache to ensure runtime env vars are used"
 php artisan config:clear || true
 php artisan cache:clear || true
+
+# Ensure Laravel storage/logs and cache have correct ownership/permissions
+echo "Fixing permissions on storage and bootstrap/cache"
+mkdir -p /var/www/html/storage/logs /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
+# Ensure laravel.log exists and is writable
+touch /var/www/html/storage/logs/laravel.log || true
+chown www-data:www-data /var/www/html/storage/logs/laravel.log || true
+chmod 664 /var/www/html/storage/logs/laravel.log || true
 
 echo "=== Starting Apache ==="
 exec apache2-foreground
