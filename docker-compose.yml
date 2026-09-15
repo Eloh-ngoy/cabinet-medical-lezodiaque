@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: medinexus
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - "8000:80"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: 'true'
+      APP_URL: http://127.0.0.1:8000
+      DATABASE_URL: postgres://root:root@db:5432/medinexus
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+    driver: local
